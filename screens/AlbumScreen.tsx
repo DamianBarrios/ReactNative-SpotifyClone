@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { View, Text } from "react-native";
 import albumDetails from "../data/albumDetails";
 
-import SongListItem from "../components/SongListItedm";
+import SongListItem from "../components/SongListItem";
 import { FlatList } from "react-native-gesture-handler";
 
 const AlbumScreen = () => {
