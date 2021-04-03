@@ -5,12 +5,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 49,
         backgroundColor: '#131313',
-        flexDirection: 'row',
         width:'100%',
         borderWidth: 2,
         borderColor: 'black',
-        alignItems: 'center',
-
     },
     image:{
         width:75,
@@ -42,6 +39,13 @@ const styles = StyleSheet.create({
         color:'lightgray',
         fontSize: 18
     },
+    progressBar: {
+        height: 3,
+        backgroundColor:'#bcbcbc'
+    },
+    row:{
+        flexDirection: 'row',
+    }
 })
 
 export default styles;

@@ -20,9 +20,13 @@ const song = {
 const PlayerWidget = () => {
   const [sound, setSound] = useState<Sound | null>(null);
   const [isPlaying, setIsplaying] = useState<boolean>(true);
+  const [duration, setDuration] = useState<number | null>(null);
+  const [position, setPosition] = useState<number | null>(null);
 
   const onPlaybackStatusUpdate = (status) => {
     setIsplaying(status.isPlaying);
+    setDuration(status.durationMillis);
+    setPosition(status.positionMillis);
   };
 
   const playCurrentSong = async () => {
@@ -53,23 +57,36 @@ const PlayerWidget = () => {
     }
   };
 
+  const getProgress = () => {
+    if (sound === null || duration === null || position === null) {
+      return 0;
+    } else if ((position / duration) * 100 === 100) {
+      sound.stopAsync();
+    }
+
+    return (position / duration) * 100;
+  };
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: song.imageUri }} style={styles.image} />
-      <View style={styles.rightContainer}>
-        <View style={styles.nameContainer}>
-          <Text style={styles.title}>{song.title}</Text>
-          <Text style={styles.artist}>{song.artist}</Text>
-        </View>
-        <View style={styles.iconContainer}>
-          <AntDesign name="hearto" size={30} color="white" />
-          <TouchableOpacity onPress={onPlayPausePress}>
-            <FontAwesome
-              name={isPlaying ? "pause" : "play"}
-              size={30}
-              color="white"
-            />
-          </TouchableOpacity>
+      <View style={[styles.progressBar, { width: `${getProgress()}%` }]} />
+      <View style={styles.row}>
+        <Image source={{ uri: song.imageUri }} style={styles.image} />
+        <View style={styles.rightContainer}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.title}>{song.title}</Text>
+            <Text style={styles.artist}>{song.artist}</Text>
+          </View>
+          <View style={styles.iconContainer}>
+            <AntDesign name="hearto" size={30} color="white" />
+            <TouchableOpacity onPress={onPlayPausePress}>
+              <FontAwesome
+                name={isPlaying ? "pause" : "play"}
+                size={30}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
