@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Album } from "../../types";
 import styles from "./styles";
+import { AppContext } from "../../AppContext";
+import { API, graphqlOperation } from "aws-amplify";
+import { getAlbum } from "../../src/graphql/queries";
+import { useRoute } from "@react-navigation/core";
 
 export type AlbumHeaderProps = {
   album: Album;
@@ -9,6 +13,15 @@ export type AlbumHeaderProps = {
 
 const AlbumHeader = (props: AlbumHeaderProps) => {
   const { album } = props;
+  const route = useRoute();
+  const albumId = route.params.id;
+  const { setSongId } = useContext(AppContext);
+
+  const onPressPlayStop = async () => {
+    const data = await API.graphql(graphqlOperation(getAlbum, { id: albumId }));
+    setSongId(data.data.getAlbum.songs.items[0].id);
+  };
+
   return (
     <View style={styles.container}>
       <Image source={{ uri: album.imageUri }} style={styles.image} />
@@ -17,7 +30,7 @@ const AlbumHeader = (props: AlbumHeaderProps) => {
         <Text style={styles.creator}>By {album.by}</Text>
         <Text style={styles.likes}>{album.numberOfLikes} Likes</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPressPlayStop}>
         <View style={styles.button}>
           <Text style={styles.buttonText}>PLAY</Text>
         </View>

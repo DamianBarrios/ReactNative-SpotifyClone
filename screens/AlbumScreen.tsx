@@ -1,7 +1,6 @@
 import { useRoute } from "@react-navigation/core";
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import albumDetails from "../data/albumDetails";
 
 import { API, graphqlOperation } from "aws-amplify";
 

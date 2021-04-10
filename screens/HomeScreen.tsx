@@ -7,7 +7,6 @@ import { API, graphqlOperation } from "aws-amplify";
 import { listAlbumCategorys } from "../src/graphql/queries";
 
 import AlbumCategory from "../components/AlbumCategory";
-import albumCategory from "../data/albumCategories";
 
 const HomeScreen = () => {
   const [categories, setCategories] = useState([]);
@@ -40,8 +39,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   title: {
     fontSize: 20,

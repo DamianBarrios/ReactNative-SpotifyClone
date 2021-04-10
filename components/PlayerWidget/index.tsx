@@ -2,6 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 import styles from "./styles";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import Swipeable from "react-native-gesture-handler/Swipeable";
+import { RectButton } from "react-native-gesture-handler";
+import Swiper from "react-native-swiper";
 
 import { Sound } from "expo-av/build/Audio";
 import { TouchableOpacity } from "react-native-gesture-handler";

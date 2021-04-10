@@ -20,24 +20,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     nameContainer:{
-        flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'baseline',
+        marginLeft: -10
     },
     iconContainer:{
         flexDirection: 'row',
         alignItems: 'center',
         width: 100,
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
     },
     title:{
         color:'white',
         fontSize:18,
         fontWeight: 'bold',
-        margin: 10
+        margin: 10,
+        position: 'relative'
     },
     artist:{
         color:'lightgray',
-        fontSize: 18
+        fontSize: 18,
+        marginLeft: 10
     },
     progressBar: {
         height: 3,
