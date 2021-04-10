@@ -1,27 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Image } from "react-native";
 import styles from "./styles";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
-import { Audio } from "expo-av";
 import { Sound } from "expo-av/build/Audio";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const song = {
-  id: "1",
-  uri:
-    "https://mus.djcristiano.tk/top40/Rauw%20Alejandro%20-%20De%20Corazon%20(Ft.%20J%20Balvin).mp3",
-  imageUri:
-    "https://cache.boston.com/resize/bonzai-fba/Globe_Photo/2011/04/14/1302796985_4480/539w.jpg",
-  title: "De Corazon",
-  artist: "Helen",
-};
+import { AppContext } from "../../AppContext";
+import { API, graphqlOperation } from "aws-amplify";
+import { getSong } from "../../src/graphql/queries";
 
 const PlayerWidget = () => {
+  const [song, setSong] = useState(null);
   const [sound, setSound] = useState<Sound | null>(null);
   const [isPlaying, setIsplaying] = useState<boolean>(true);
   const [duration, setDuration] = useState<number | null>(null);
   const [position, setPosition] = useState<number | null>(null);
+
+  const { songId } = useContext(AppContext);
+
+  useEffect(() => {
+    const fetchSong = async () => {
+      try {
+        const data = await API.graphql(
+          graphqlOperation(getSong, { id: songId })
+        );
+        setSong(data.data.getSong);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    fetchSong();
+  }, [songId]);
 
   const onPlaybackStatusUpdate = (status) => {
     setIsplaying(status.isPlaying);
@@ -34,7 +45,7 @@ const PlayerWidget = () => {
       await sound.unloadAsync();
     }
 
-    const { sound: newSound } = await Audio.Sound.createAsync(
+    const { sound: newSound } = await Sound.createAsync(
       { uri: song.uri },
       { shouldPlay: isPlaying },
       onPlaybackStatusUpdate
@@ -43,8 +54,10 @@ const PlayerWidget = () => {
   };
 
   useEffect(() => {
-    playCurrentSong();
-  }, []);
+    if (song) {
+      playCurrentSong();
+    }
+  }, [song]);
 
   const onPlayPausePress = async () => {
     if (!sound) {
@@ -66,6 +79,10 @@ const PlayerWidget = () => {
 
     return (position / duration) * 100;
   };
+
+  if (!song) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
